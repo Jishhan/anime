@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="6a97888e-site-verification" content="3236be7fb9e7eba22cf0c57d20d00379">
+  <title>BeardexAnime</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #111;
+      color: white;
+      font-family: sans-serif;
+    }
+    .mbl-header{
+        display: flex;
+        display: none;
+      }
+
+    .hero-banner {
+      background-size: cover;
+      background-position: center;
+      height: 50vh;
+      position: relative;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+      position: absolute;
+      bottom: 30px;
+      left: 20px;
+      color: white;
+    }
+
+    .hero-content h1 {
+      font-size: 3rem;
+      font-weight: bold;
+    }
+
+    .hero-content p {
+      font-size: 1.2rem;
+    }
+
+    .hero-content button {
+      background-color: #e50914;
+      padding: 10px 20px;
+      border: none;
+      color: white;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .hero-content button:hover {
+      background-color: #b81d16;
+    }
+
+    .carousel-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .carousel {
+      display: flex;
+      transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-item {
+      flex: 0 0 100%;
+      height: 50vh;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #333;
+      min-width: 160px;
+      z-index: 1;
+      border-radius: 4px;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content a {
+      color: white;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #575757;
+    }
+
+    .anime-card {
+      position: relative;
+      width: 160px;
+      height: 240px;
+      display: flex;
+      flex-direction: column;
+      background-color: #2d2d2d;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    .anime-card:hover {
+      transform: scale(1.05);
+    }
+
+    .anime-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .anime-title {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      font-size: 14px;
+      padding: 6px;
+      text-align: center;
+    }
+
+    .thumbnail {
+      display: block;
+    }
+
+    .hover-preview {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 2;
+    }
+
+    .anime-card:hover .thumbnail {
+      display: none;
+    }
+
+    .anime-card:hover .hover-preview {
+      display: block;
+    }
+
+    @media (max-width: 768px) {
+      .hero-content h1 {
+        font-size: 2rem;
+      }
+      .hero-content p {
+        font-size: 1rem;
+      }
+      .hero-content button {
+        font-size: 1rem;
+        border-radius: 10px;
+      } 
+      .anime-title {
+        font-size: 12px;
+      }
+      .header-icon {
+        font-size: 1.2rem;
+      }
+      .header-icon:hover {
+        font-size: 1.1rem;
+      }
+      .header-movie{
+        display: none;
+      }
+      .mbl-header{
+        display: flex;
+        /* display: block; */
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      
+    .carousel-wrapper {
+      margin: 0px;
+    }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 w-full z-20 bg-transparent backdrop-blur-lg bg-black text-white p-4 flex justify-between items-center">
+    <a href="index.html" class="header-icon text-2xl font-bold hover:text-red-500 transition">BeardexAnime</a>
+    <a href="movie.html" class="header-movie text-xl font-medium hover:text-red-500 transition ml-6">Movie</a>
+    <div class="flex items-center space-x-4">
+      <input type="text" id="searchInput" onkeyup="searchAnime()" placeholder="Search Anime..." class="p-2 rounded bg-gray-800 text-white focus:outline-none w-full" />
+      <div class="header-movie dropdown  ">
+        <button class="bg-gray-800 px-4 py-2 rounded hover:bg-gray-700 text-white">Genres</button>
+        <div class="dropdown-content">
+          <a href="#" onclick="filterCategory('All')">All</a>
+          <a href="#" onclick="filterCategory('Action')">Action</a>
+          <a href="#" onclick="filterCategory('Horror')">Horror</a>
+          <a href="#" onclick="filterCategory('Sci-Fi')">Sci-Fi</a>
+          <a href="#" onclick="filterCategory('Comedy')">Comedy</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- mbl header -->
+   <div class="mbl-header mt-20 mbl:hidden w-full z-20 text-white p-4">
+    <div><a href="movie.html" class="header-movie-mbl text-xl font-medium hover:text-red-500 ">Movie</a></div>
+    <div class="dropdown  ">
+      <button class="bg-gray-800 px-4 py-2 rounded hover:bg-gray-700 text-white">Genres</button>
+      <div class="dropdown-content">
+        <a href="#" onclick="filterCategory('All')">All</a>
+        <a href="#" onclick="filterCategory('Action')">Action</a>
+        <a href="#" onclick="filterCategory('Horror')">Horror</a>
+        <a href="#" onclick="filterCategory('Sci-Fi')">Sci-Fi</a>
+        <a href="#" onclick="filterCategory('Comedy')">Comedy</a>
+      </div>
+    </div>  
+  </div>
+
+  <!-- Hero Carousel -->
+  <section class="carousel-wrapper mt-20">
+    <div class="carousel" id="carousel">
+      <div class="hero-banner carousel-item" style="background-image: url('https://a.storyblok.com/f/178900/960x539/240119fdeb/i-parry-everything-pv.jpg/m/filters:quality(95)format(webp)');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>The Gorilla God,s Go-To Girl</h1>
+          <p>Time travel through the chaotic world of Steins;Gate and change history forever.</p>
+          <a href="The Gorilla God,s Go-To Girl.html"><button>▶ Play</button></a>
+        </div>
+      </div>
+      <div class="hero-banner carousel-item" style="background-image: url('image/d80f9-17422200011585-1920.webp');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>The Unaware Atelier Master</h1>
+          <p>Kurt, a banished errand boy with SSS-rank skills, embarks on a journey to discover his true potential</p>
+          <a href="Tokyo Ghoul.html"><button>▶ Play</button></a>
+        </div>
+      </div>
+      <div class="hero-banner carousel-item" style="background-image: url('image/d80f9-17422200011585-1920%20(1).jpg');">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <h1>I Parry Everything</h1>
+          <p>Humanity's last stand against giant creatures that threaten to annihilate them.</p>
+          <a href="Attack_on_Titan.html"><button>▶ Play</button></a>
+        </div>
+      </div>
+    </div>
+    <button id="prev" class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full">❮</button>
+    <button id="next" class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full">❯</button>
+  </section>
+
+  <!-- Anime Scroll Section -->
+  <section class="relative p-4">
+    <h2 class="text-2xl font-bold mb-4">All Anime</h2>
+    <button onclick="scrollAnimeGrid(-300)" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-white p-2 rounded-full">❮</button>
+    <div id="animeGrid" class="flex overflow-x-auto space-x-4 scroll-smooth"></div>
+    <button onclick="scrollAnimeGrid(300)" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-white p-2 rounded-full">❯</button>
+  </section>
+
+  <!-- Recommended Section -->
+  <section class="relative p-4">
+    <h2 class="text-2xl font-bold mb-4">Recommended</h2>
+    <button onclick="scrollRecommended(-300)" class="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-white p-2 rounded-full">❮</button>
+    <div id="recommendedCarousel" class="flex overflow-x-auto space-x-4 scroll-smooth"></div>
+    <button onclick="scrollRecommended(300)" class="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-gray-800 text-white p-2 rounded-full">❯</button>
+  </section>
+
+  <script>
+    const animeList = [
+      {
+        title: 'The Unaware Atelier Master',
+        thumbnail: 'https://vz-77b320ab-237.b-cdn.net/5b89faf8-0538-4ad9-a384-38e6991f0b1a/thumbnail_71625d26.jpg',
+        preview: 'https://vz-77b320ab-237.b-cdn.net/5b89faf8-0538-4ad9-a384-38e6991f0b1a/preview.webp',
+        link: 'naruto-episodes.html',
+        category: ['Action', 'Sci-Fi']
+      },
+      {
+        title: 'I Parry Everything',
+        thumbnail: 'https://i.ibb.co/TB6V4tLk/74897358-1-imresizer.png',
+         preview: 'https://vz-77b320ab-237.b-cdn.net/5b89faf8-0538-4ad9-a384-38e6991f0b1a/preview.webp',
+        link: 'I-parry-everything.html',
+        category: ['Horror']
+      },
+       {
+        title: 'I Parry Everything',
+        thumbnail: 'https://i.ibb.co/TB6V4tLk/74897358-1-imresizer.png',
+        preview: 'https://i.ibb.co/TB6V4tLk/74897358-1-imresizer.png',
+        link: 'I-parry-everything.html',
+        category: ['Horror']
+      }
+      // Add more anime as needed
+    ];
+
+    const recommendedList = [
+      { title: 'Death Note', image: 'https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg', link: '#' },
+      { title: 'Demon Slayer', image: 'https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg', link: '#' },
+      { title: 'zeeshan Slayer', image: 'https://upload.wikimedia.org/wikipedia/en/6/6f/Death_Note_Vol_1.jpg', link: '#' },
+
+      { title: 'Mob Psycho 100', image: 'https://upload.wikimedia.org/wikipedia/en/8/80/Mob_Psycho_100_volume_1.jpg', link: '#' },
+      { title: 'Fullmetal Alchemist', image: 'https://upload.wikimedia.org/wikipedia/en/5/5e/Fullmetal_Alchemist_-_volume_1.jpg', link: '#' },
+      { title: 'Jujutsu Kaisen', image: 'https://upload.wikimedia.org/wikipedia/en/8/8c/Jujutsu_kaisen.jpg', link: '#' }
+    ];
+
+    function displayAnime(animeArray) {
+      const grid = document.getElementById('animeGrid');
+      grid.innerHTML = '';
+      animeArray.forEach(anime => {
+        const card = document.createElement('a');
+        card.href = anime.link;
+        card.className = 'anime-card flex-shrink-0';
+
+        card.innerHTML = `
+          <img src="${anime.thumbnail}" class="thumbnail" alt="${anime.title}">
+          <img src="${anime.preview}" class="hover-preview" alt="${anime.title} Preview">
+          <div class="anime-title">${anime.title}</div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function searchAnime() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = animeList.filter(anime => anime.title.toLowerCase().includes(query));
+      displayAnime(filtered);
+    }
+
+    function filterCategory(category) {
+      if (category === 'All') {
+        displayAnime(animeList);
+      } else {
+        const filtered = animeList.filter(anime => anime.category.includes(category));
+        displayAnime(filtered);
+      }
+    }
+
+    let currentIndex = 0;
+    const carousel = document.getElementById('carousel');
+    const totalBanners = document.querySelectorAll('.carousel-item').length;
+
+    function goToSlide(index) {
+      currentIndex = (index + totalBanners) % totalBanners;
+      carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    document.getElementById('prev').addEventListener('click', () => goToSlide(currentIndex - 1));
+    document.getElementById('next').addEventListener('click', () => goToSlide(currentIndex + 1));
+    setInterval(() => goToSlide(currentIndex + 1), 5000);
+
+    function scrollAnimeGrid(offset) {
+      document.getElementById('animeGrid').scrollBy({ left: offset, behavior: 'smooth' });
+    }
+
+    function scrollRecommended(offset) {
+      document.getElementById('recommendedCarousel').scrollBy({ left: offset, behavior: 'smooth' });
+    }
+
+    function displayRecommended() {
+      const recContainer = document.getElementById('recommendedCarousel');
+      recContainer.innerHTML = '';
+      recommendedList.forEach(anime => {
+        const card = document.createElement('a');
+        card.href = anime.link;
+        card.className = 'anime-card flex-shrink-0';
+        card.innerHTML = `
+          <img src="${anime.image}" alt="${anime.title}" class="w-full h-full object-cover">
+          <div class="anime-title">${anime.title}</div>
+        `;
+        recContainer.appendChild(card);
+      });
+    }
+
+    window.onload = function () {
+      displayAnime(animeList);
+      displayRecommended();
+    };
+  </script>
+
+</body>
+
+</html>
